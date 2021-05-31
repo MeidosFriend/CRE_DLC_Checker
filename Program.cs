@@ -6,21 +6,22 @@ using System.Net;
 using System.Text;
 using Microsoft.Win32;
 
+
+
 namespace COM3D2_DLC_Checker
 {
-    
-    class Program
+	class Program
     {
         
         // Variables
         static readonly string GAME_NAME = "COM3D2";
         static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
-        static readonly string MY_DLC_LST_FILE = "MY_COM_NewListDLC.lst";
+        static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
+        static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
         static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
         static readonly string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
 
-        static readonly string DLC_LST_FILE = "COM_NewListDLC.lst";
-        static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LST_FILE);
+        static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
 
         // ini File default
         static string UseCurrentDir = "No";
@@ -28,7 +29,8 @@ namespace COM3D2_DLC_Checker
         static string MyDLCListFile = "No";
 
         const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
-        static void Main(string[] args)
+        
+		static void Main(string[] args)
         {
             // Initialize ini File
             GetIniFile(ref UseCurrentDir, ref UpdateListFile, ref MyDLCListFile);
@@ -39,9 +41,9 @@ namespace COM3D2_DLC_Checker
             // Custom Listfile
             if (MyDLCListFile == "Yes")
             {
-                DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), MY_DLC_LST_FILE);
+                DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), MY_DLC_LIST_FILE);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Using Custom Listfile {0}", MY_DLC_LST_FILE);
+                Console.WriteLine("Using Custom Listfile {0}", MY_DLC_LIST_FILE);
             }
             // Standard Listfile
             else
@@ -58,7 +60,7 @@ namespace COM3D2_DLC_Checker
                     {
                         Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("Connected to {0}", DLC_URL);
-                        //Console.WriteLine("Hint: You can preserve your current {0} by disable autoupdate in {1} with: UpdateListFile=No", DLC_LST_FILE, INI_FILE);
+                        //Console.WriteLine("Hint: You can preserve your current {0} by disable autoupdate in {1} with: UpdateListFile=No", DLC_LIST_FILE, INI_FILE);
                         UPDATE_DLC_LIST(HTTP_RESPOND.Item2);
                     }
                     // Internet Connection NOK
@@ -72,24 +74,11 @@ namespace COM3D2_DLC_Checker
                 else
                 {
                     Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.WriteLine("Updating {0} disabled", DLC_LST_FILE);
+                    Console.WriteLine("Updating {0} disabled", DLC_LIST_FILE);
                     //Console.ForegroundColor = ConsoleColor.Cyan;
                     //Console.WriteLine("Hint: You can enable autoupdate in {0} with: UpdateListFile=Yes", INI_FILE);
                 }
             }
-
-            // Print Game Directory
-            if (UseCurrentDir=="No")
-            {
-                Console.ForegroundColor = ConsoleColor.Cyan;
-                //Console.WriteLine("Game Dir: " + GET_GAME_INSTALLPATH());
-            }
-            else
-            {
-                Console.ForegroundColor = ConsoleColor.Yellow;
-                //Console.WriteLine("Game Dir: " + GET_GAME_INSTALLPATH());
-            }
-            //Console.WriteLine("Game Dir: " + GET_GAME_INSTALLPATH());
 
             // DLC LIST = [DLC_FILENAME, DLC_NAME]
             IDictionary<string, string> DLC_LIST = READ_DLC_LIST();
@@ -103,42 +92,46 @@ namespace COM3D2_DLC_Checker
             PRINT_DLC(DLC_LIST_SORTED.Item1, DLC_LIST_SORTED.Item2);
 
             EXIT_PROGRAM();
-        }
+		}
+		// End Main
+	
+		// GetIniFile
+		static void GetIniFile(ref string UseCurrentDir, ref string UpdateListFile, ref string MyDLCListFile)
+		{
+			// Creates or loads an INI file in the same directory as your executable
+        	// named EXE.ini (where EXE is the name of your executable)
+			// Key, {Value}, Section            	
 
-	static void GetIniFile(ref string UseCurrentDir, ref string UpdateListFile, ref string MyDLCListFile)
-	{
-		// Creates or loads an INI file in the same directory as your executable
-        // named EXE.ini (where EXE is the name of your executable)
-		// Key, {Value}, Section            	
+			var MyIni = new IniFile();
+       		if (!MyIni.KeyExists("UseCurrentDir", "GameDirectory"))
+        	{
+        		MyIni.Write("UseCurrentDir", "No", "GameDirectory");
+        	}
+			UseCurrentDir = MyIni.Read("UseCurrentDir","GameDirectory");
 
-		var MyIni = new IniFile();
-        if (!MyIni.KeyExists("UseCurrentDir", "GameDirectory"))
-        {
-           	MyIni.Write("UseCurrentDir", "No", "GameDirectory");
-        }
-		UseCurrentDir = MyIni.Read("UseCurrentDir","GameDirectory");
+        	if (!MyIni.KeyExists("UpdateListFile", "DLCListFile"))
+        	{
+            	MyIni.Write("UpdateListFile", "Yes", "DLCListFile");
+        	}
+        	UpdateListFile = MyIni.Read("UpdateListFile", "DLCListFile");
 
-        if (!MyIni.KeyExists("UpdateListFile", "DLCListFile"))
-        {
-            MyIni.Write("UpdateListFile", "Yes", "DLCListFile");
-        }
-        UpdateListFile = MyIni.Read("UpdateListFile", "DLCListFile");
+        	if (!MyIni.KeyExists("MyDLCListFile", "DLCListFile"))
+        	{
+            	MyIni.Write("MyDLCListFile", "No", "DLCListFile");
+        	}
+        	MyDLCListFile = MyIni.Read("MyDLCListFile", "DLCListFile");
+    	}
 
-        if (!MyIni.KeyExists("MyDLCListFile", "DLCListFile"))
-        {
-            MyIni.Write("MyDLCListFile", "No", "DLCListFile");
-        }
-        MyDLCListFile = MyIni.Read("MyDLCListFile", "DLCListFile");
-    }
-
-        static void PRINT_HEADER()
+        // PRINT_HEADER
+		static void PRINT_HEADER()
         {
             CONSOLE_COLOR(ConsoleColor.Green, "===========================================================================================");
             CONSOLE_COLOR(ConsoleColor.Green, GAME_HEADER);
             CONSOLE_COLOR(ConsoleColor.Green, "===========================================================================================");
         }
 
-        static Tuple<HttpStatusCode, string> CONNECT_TO_INTERNET(string DLC_URL)
+        // CONNECT_TO_INTERNET
+		static Tuple<HttpStatusCode, string> CONNECT_TO_INTERNET(string DLC_URL)
         {
             HttpWebRequest httpWebRequest = (HttpWebRequest)WebRequest.Create(DLC_URL);
             HttpWebRequest request = httpWebRequest;
@@ -152,19 +145,22 @@ namespace COM3D2_DLC_Checker
 
                 return new Tuple<HttpStatusCode, string>(response.StatusCode, reader.ReadToEnd());
             }
-            catch (System.Net.WebException){
+            catch (System.Net.WebException)
+			{
                 return new Tuple<HttpStatusCode, string>(HttpStatusCode.NotFound, null);
             }
 
         }
 
-        static void UPDATE_DLC_LIST(string UPDATED_CONTENT)
+        // UPDATE_DLC_LIST
+		static void UPDATE_DLC_LIST(string UPDATED_CONTENT)
         {
             using StreamWriter writer = new StreamWriter(DLC_LIST_PATH);
             writer.Write(UPDATED_CONTENT);
         }
 
-        static IDictionary<string, string> READ_DLC_LIST()
+        // Dictionary READ_DLC_LIST
+		static IDictionary<string, string> READ_DLC_LIST()
         {
             List<string> DLC_LIST_UNFORMATED = new List<string>();
 
@@ -188,18 +184,14 @@ namespace COM3D2_DLC_Checker
                 }
                 EXIT_PROGRAM();
             }
-
             // DLC_LIST_FORMAT = [Keys = DLC_Filename, Value = DLC_Name]
             IDictionary<string, string> DLC_LIST_FORMATED = new Dictionary<string, string>();
-
             foreach (string DLC_LIST in DLC_LIST_UNFORMATED)
             {
                 String[] temp_strlist = DLC_LIST.Split(',');
                 DLC_LIST_FORMATED.Add(temp_strlist[0], temp_strlist[1]);
             }
-
             return DLC_LIST_FORMATED;
-
         }
 
         static string GET_GAME_INSTALLPATH()
@@ -266,7 +258,9 @@ namespace COM3D2_DLC_Checker
             }
             return GAMEDATA_LIST;
         }
-        static Tuple<List<string>,List<string>> COMPARE_DLC(IDictionary<string, string> DLC_LIST, List<string> GAMEDATA_LIST)
+        
+		
+		static Tuple<List<string>,List<string>> COMPARE_DLC(IDictionary<string, string> DLC_LIST, List<string> GAMEDATA_LIST)
         {
             // DLC LIST = [DLC_FILENAME, DLC_NAME]
             List<string> DLC_FILENAMES = new List<string>(DLC_LIST.Keys);
