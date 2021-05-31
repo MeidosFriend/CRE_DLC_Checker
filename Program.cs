@@ -12,29 +12,30 @@ namespace COM3D2_DLC_Checker
 {
 	class Program
     {
-        
-        // Variables
+        // static ro strings
         static readonly string GAME_NAME = "COM3D2";
         static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
         static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
         static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
         static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
         static readonly string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
-
-        static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
-
-        // ini File default
+		static readonly string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
+        
+        // static strings ini File default
         static string UseCurrentDir = "No";
         static string UpdateListFile = "Yes";
         static string MyDLCListFile = "No";
+		
+		// Initialize ini File
+        GetIniFile();
+		
+		// static string DLC_LIST_PATH
+		static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
 
-        const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
+        //const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
         
 		static void Main(string[] args)
         {
-            // Initialize ini File
-            GetIniFile(ref UseCurrentDir, ref UpdateListFile, ref MyDLCListFile);
-
             // Write Header Lines to Console
             PRINT_HEADER();
 
@@ -96,7 +97,7 @@ namespace COM3D2_DLC_Checker
 		// End Main
 	
 		// GetIniFile
-		static void GetIniFile(ref string UseCurrentDir, ref string UpdateListFile, ref string MyDLCListFile)
+		static void GetIniFile()
 		{
 			// Creates or loads an INI file in the same directory as your executable
         	// named EXE.ini (where EXE is the name of your executable)
