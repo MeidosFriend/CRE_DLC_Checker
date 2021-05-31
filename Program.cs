@@ -11,7 +11,7 @@ using Microsoft.Win32;
 namespace DLC_Checker
 {
 	class Program
-    {
+	{
     	// static ro strings
     	static readonly string GAME_NAME = "COM3D2";
         static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
