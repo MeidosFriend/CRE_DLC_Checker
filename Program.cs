@@ -6,35 +6,29 @@ using System.Net;
 using System.Text;
 using Microsoft.Win32;
 
-
-
 namespace DLC_Checker
 {
 	class Program
 	{
-		// static ro strings
-		static readonly string GAME_NAME = "COM3D2";
-		static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
-		static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
-		static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
-		static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
-		static readonly string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
-		static readonly string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
-		
-		// static strings ini File default
-		static string UseCurrentDir = "No";
-		static string UpdateListFile = "Yes";
-		static string MyDLCListFile = "No";
-		
-		// Initialize ini File
-		GetIniFile();
-		
-		// static string DLC_LIST_PATH
-		static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
-		
-		//const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
+
+        // Class Gamedata init, sets the Values for the used Game
+        static GameData MyData = new GameData();
+
+        static readonly string GAME_NAME = MyData.GetGAME_NAME();
+        static readonly string GAME_REGISTRY = MyData.GetGAME_REGISTRY();
+        static readonly string INI_FILE = MyData.GetINI_FILE();
+        static readonly string DLC_LIST_FILE = MyData.GetDLC_LIST_FILE();
+        static readonly string MY_DLC_LIST_FILE = MyData.GetMY_DLC_LIST_FILE();
+        static readonly string DLC_LIST_PATH = MyData.GetDLC_LIST_PATH();
+        static readonly string GAME_HEADER = MyData.GetGAME_HEADER();
+        static readonly string DLC_URL = MyData.GetDLC_URL();
         
-		static void Main(string[] args)
+        static readonly string UseCurrentDir = MyData.GetUseCurrentDir();
+        static readonly string UpdateListFile = MyData.GetUpdateListFile();
+        static readonly string MyDLCListFile = MyData.GetMyDLCListFile();
+        static readonly string UseMyURL = MyData.GetUseMyURL();
+        
+        static void Main(string[] args)
         {
             // Write Header Lines to Console
             PRINT_HEADER();
@@ -42,9 +36,9 @@ namespace DLC_Checker
             // Custom Listfile
             if (MyDLCListFile == "Yes")
             {
-                DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), MY_DLC_LIST_FILE);
+                //DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), MyGameData.GetMY_DLC_LIST_FILE);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Using Custom Listfile {0}", MY_DLC_LIST_FILE);
+                Console.WriteLine("Using Custom Listfile {0}", MyData.GetMY_DLC_LIST_FILE());
             }
             // Standard Listfile
             else
@@ -59,8 +53,17 @@ namespace DLC_Checker
                     // Internet Connection OK
                     if (HTTP_RESPOND.Item1 == HttpStatusCode.OK)
                     {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        if (UseMyURL == "No")
+                        {
+                            Console.ForegroundColor = ConsoleColor.Cyan;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Yellow;
+                            Console.WriteLine("Using Custom URL");
+                        }
                         Console.WriteLine("Connected to {0}", DLC_URL);
+
                         //Console.WriteLine("Hint: You can preserve your current {0} by disable autoupdate in {1} with: UpdateListFile=No", DLC_LIST_FILE, INI_FILE);
                         UPDATE_DLC_LIST(HTTP_RESPOND.Item2);
                     }
@@ -79,6 +82,7 @@ namespace DLC_Checker
                     //Console.ForegroundColor = ConsoleColor.Cyan;
                     //Console.WriteLine("Hint: You can enable autoupdate in {0} with: UpdateListFile=Yes", INI_FILE);
                 }
+                Console.ResetColor();
             }
 
             // DLC LIST = [DLC_FILENAME, DLC_NAME]
@@ -96,39 +100,14 @@ namespace DLC_Checker
 		}
 		// End Main
 	
-		// GetIniFile
-		static void GetIniFile()
-		{
-			// Creates or loads an INI file in the same directory as your executable
-        	// named EXE.ini (where EXE is the name of your executable)
-			// Key, {Value}, Section            	
-
-			var MyIni = new IniFile();
-       		if (!MyIni.KeyExists("UseCurrentDir", "GameDirectory"))
-        	{
-        		MyIni.Write("UseCurrentDir", "No", "GameDirectory");
-        	}
-			UseCurrentDir = MyIni.Read("UseCurrentDir","GameDirectory");
-
-        	if (!MyIni.KeyExists("UpdateListFile", "DLCListFile"))
-        	{
-            	MyIni.Write("UpdateListFile", "Yes", "DLCListFile");
-        	}
-        	UpdateListFile = MyIni.Read("UpdateListFile", "DLCListFile");
-
-        	if (!MyIni.KeyExists("MyDLCListFile", "DLCListFile"))
-        	{
-            	MyIni.Write("MyDLCListFile", "No", "DLCListFile");
-        	}
-        	MyDLCListFile = MyIni.Read("MyDLCListFile", "DLCListFile");
-    	}
-
-        // PRINT_HEADER
+		// PRINT_HEADER
 		static void PRINT_HEADER()
         {
-            CONSOLE_COLOR(ConsoleColor.Green, "===========================================================================================");
-            CONSOLE_COLOR(ConsoleColor.Green, GAME_HEADER);
-            CONSOLE_COLOR(ConsoleColor.Green, "===========================================================================================");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("===========================================================================================");
+            Console.WriteLine(GAME_HEADER);
+            Console.WriteLine("===========================================================================================");
+            Console.ResetColor();
         }
 
         // CONNECT_TO_INTERNET
@@ -164,7 +143,6 @@ namespace DLC_Checker
 		static IDictionary<string, string> READ_DLC_LIST()
         {
             List<string> DLC_LIST_UNFORMATED = new List<string>();
-
             try
             {
                 // Skip 1 = Remove version header
@@ -177,20 +155,34 @@ namespace DLC_Checker
             {
                 if (MyDLCListFile == "No")
                 {
-                    CONSOLE_COLOR(ConsoleColor.Red, DLC_LST_FILE + " file doesn't exist");
+                    CONSOLE_COLOR(ConsoleColor.Red, DLC_LIST_FILE + " file doesn't exist");
                 }
                 else
                 {
-                    CONSOLE_COLOR(ConsoleColor.Red, MY_DLC_LST_FILE + " file doesn't exist");
+                    CONSOLE_COLOR(ConsoleColor.Red, MY_DLC_LIST_FILE + " file doesn't exist");
                 }
                 EXIT_PROGRAM();
             }
             // DLC_LIST_FORMAT = [Keys = DLC_Filename, Value = DLC_Name]
             IDictionary<string, string> DLC_LIST_FORMATED = new Dictionary<string, string>();
+            string sub;
             foreach (string DLC_LIST in DLC_LIST_UNFORMATED)
             {
-                String[] temp_strlist = DLC_LIST.Split(',');
-                DLC_LIST_FORMATED.Add(temp_strlist[0], temp_strlist[1]);
+                DLC_LIST.Trim();
+                if (DLC_LIST != "")
+                {     
+                    sub = DLC_LIST.Substring(0, 1);
+                    if (sub!="/" && sub != "*" && sub != ";")
+                    { 
+                        string[] temp_strlist = DLC_LIST.Split(',');
+                        if (temp_strlist.Length > 2)
+                        {
+                            for (int i = 2; i < temp_strlist.Length; i++)
+                                temp_strlist[1] = temp_strlist[1] + "," + temp_strlist[i];
+                        }
+                        DLC_LIST_FORMATED.Add(temp_strlist[0], temp_strlist[1]);
+                    }
+                }
             }
             return DLC_LIST_FORMATED;
         }
@@ -199,9 +191,8 @@ namespace DLC_Checker
         {
             // Default: Current Directory of DLC_Checker
             // Will be replaced by Registry Entry
-            const string keyName = "HKEY_CURRENT_USER" + "\\" + GAME_REGISTRY;
-
-            string GAME_DIRECTORY_REGISTRY = (string)Registry.GetValue(keyName,"InstallPath","");
+            
+            string GAME_DIRECTORY_REGISTRY = (string)Registry.GetValue(GAME_REGISTRY, "InstallPath","");
 
             if (UseCurrentDir == "No")
             {
@@ -259,8 +250,7 @@ namespace DLC_Checker
             }
             return GAMEDATA_LIST;
         }
-        
-		
+        		
 		static Tuple<List<string>,List<string>> COMPARE_DLC(IDictionary<string, string> DLC_LIST, List<string> GAMEDATA_LIST)
         {
             // DLC LIST = [DLC_FILENAME, DLC_NAME]
