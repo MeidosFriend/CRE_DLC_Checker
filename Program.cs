@@ -12,27 +12,27 @@ namespace DLC_Checker
 {
 	class Program
 	{
-    	// static ro strings
-    	static readonly string GAME_NAME = "COM3D2";
-        static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
-        static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
-        static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
-        static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
-        static readonly string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
+		// static ro strings
+		static readonly string GAME_NAME = "COM3D2";
+		static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
+		static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
+		static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
+		static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
+		static readonly string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
 		static readonly string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
-        
-        // static strings ini File default
-        static string UseCurrentDir = "No";
-        static string UpdateListFile = "Yes";
-        static string MyDLCListFile = "No";
+		
+		// static strings ini File default
+		static string UseCurrentDir = "No";
+		static string UpdateListFile = "Yes";
+		static string MyDLCListFile = "No";
 		
 		// Initialize ini File
-        GetIniFile();
+		GetIniFile();
 		
 		// static string DLC_LIST_PATH
 		static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
-
-        //const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
+		
+		//const string GAME_REGISTRY = "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
         
 		static void Main(string[] args)
         {
