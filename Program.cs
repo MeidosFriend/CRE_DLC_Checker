@@ -8,7 +8,7 @@ using Microsoft.Win32;
 
 
 
-namespace COM3D2_DLC_Checker
+namespace DLC_Checker
 {
 	class Program
     {
