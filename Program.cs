@@ -229,7 +229,7 @@ namespace DLC_Checker
             catch (DirectoryNotFoundException)
             {
                 CONSOLE_COLOR(ConsoleColor.Red, "GameData Directory doesn't exist, ");
-                CONSOLE_COLOR(ConsoleColor.Red, "invalid Configuration Parameter in " + INI_FILE);
+                CONSOLE_COLOR(ConsoleColor.Red, "No valid Game Installation found");
                 CONSOLE_COLOR(ConsoleColor.Red, "Exit Program. ");
                 EXIT_PROGRAM();
             }

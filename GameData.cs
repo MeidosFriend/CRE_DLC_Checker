@@ -8,11 +8,11 @@ namespace DLC_Checker
         public static readonly string GAME_NAME = "COM3D2";
         public static readonly string INI_FILE = GAME_NAME + "_DLC_Checker.ini";
         public static readonly string DLC_LIST_FILE = "COM_NewListDLC.lst";
-        public static readonly string MY_DLC_LIST_FILE = "MY_COM_NewListDLC.lst";
-        public static readonly string GAME_HEADER = "         COM3D2_DLC_Checker   |   Github.com/MeidosFriend/COM3D2_DLC_Checker";
-        public static readonly string GAME_REGISTRY = "HKEY_CURRENT_USER\\" + "SOFTWARE\\KISS\\カスタムオーダーメイド3D2";
+        public static readonly string MY_DLC_LIST_FILE = "MY_" + DLC_LIST_FILE;
+        public static readonly string GAME_HEADER = "         " + GAME_NAME + "_Checker   |   Github.com/MeidosFriend/" + GAME_NAME + "_Checker";
+        public static readonly string GAME_REGISTRY = "HKEY_CURRENT_USER\\SOFTWARE\\KISS\\" + "カスタムオーダーメイド3D2";
         
-        public static string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/COM3D2_DLC_Checker/master/COM_NewListDLC.lst";
+        public static string DLC_URL = "https://raw.githubusercontent.com/MeidosFriend/" + GAME_NAME + "_DLC_Checker/master/" + DLC_LIST_FILE;
         public static string DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), DLC_LIST_FILE);
         
         public static string UseCurrentDir;
