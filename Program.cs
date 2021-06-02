@@ -198,19 +198,25 @@ namespace DLC_Checker
             {
                 if (GAME_DIRECTORY_REGISTRY != null)
                 {
-                    CONSOLE_COLOR(ConsoleColor.Cyan, "Game Dir: " + GAME_DIRECTORY_REGISTRY);
+                    if (!Directory.Exists(GAME_DIRECTORY_REGISTRY))
+            		{
+                		CONSOLE_COLOR(ConsoleColor.Yellow, "Warning : " + GAME_NAME + "installation directory set in registry but doesn't exist. Will using work directory");
+                		CONSOLE_COLOR(ConsoleColor.Yellow, "Current working directory: " + Directory.GetCurrentDirectory());
+                    	return Directory.GetCurrentDirectory();
+            		}
+					CONSOLE_COLOR(ConsoleColor.Cyan, GAME_NAME + "installation directory found in registry: " + GAME_DIRECTORY_REGISTRY);
                     return GAME_DIRECTORY_REGISTRY;
                 }
                 else
                 {
-                    CONSOLE_COLOR(ConsoleColor.Yellow, GAME_NAME + " installation path not set in registry.");
-                    CONSOLE_COLOR(ConsoleColor.Yellow, "Current working directory: " + Directory.GetCurrentDirectory());
+                    CONSOLE_COLOR(ConsoleColor.Yellow, "Warning : " + GAME_NAME + "installation directory not found in registry. Will using work directory");
+					CONSOLE_COLOR(ConsoleColor.Yellow, "Current working directory: " + Directory.GetCurrentDirectory());
                     return Directory.GetCurrentDirectory();
                 }
             }
             else
             {
-                CONSOLE_COLOR(ConsoleColor.Yellow, "Current working directory: " + Directory.GetCurrentDirectory());
+                CONSOLE_COLOR(ConsoleColor.Yellow, "Set up to use current work directory: " + Directory.GetCurrentDirectory());
                 return Directory.GetCurrentDirectory();
             }
         }
