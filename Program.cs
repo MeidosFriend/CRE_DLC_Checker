@@ -32,13 +32,34 @@ namespace DLC_Checker
         {
             // Write Header Lines to Console
             PRINT_HEADER();
+			
+			// update/get DLC Listfile 
+			GET_DLC_LISTFILE();
+            
+            // DLC LIST = [DLC_FILENAME, DLC_NAME]
+            IDictionary<string, string> DLC_LIST = READ_DLC_LIST();
+            List<string> GAMEDATA_LIST = READ_GAMEDATA();
 
-            // Custom Listfile
+            // DLC LIST SORTED
+            // Item 1 = INSTALLED_DLC
+            // Item 2 = NOT_INSTALLED_DLC
+            Tuple<List<string>, List<string>> DLC_LIST_SORTED = COMPARE_DLC(DLC_LIST, GAMEDATA_LIST);
+
+            PRINT_DLC(DLC_LIST_SORTED.Item1, DLC_LIST_SORTED.Item2);
+
+            EXIT_PROGRAM();
+		}
+		// End Main
+	
+		// Get DLC List File
+		static void GET_DLC_LISTFILE()
+		{
+			// Custom Listfile
             if (MyDLCListFile == "Yes")
             {
                 //DLC_LIST_PATH = Path.Combine(Directory.GetCurrentDirectory(), MyGameData.GetMY_DLC_LIST_FILE);
                 Console.ForegroundColor = ConsoleColor.Yellow;
-                Console.WriteLine("Using Custom Listfile {0}", MyData.GetMY_DLC_LIST_FILE());
+                Console.WriteLine("Using Custom Listfile {0}", MY_DLC_LIST_FILE);
             }
             // Standard Listfile
             else
@@ -56,6 +77,7 @@ namespace DLC_Checker
                         if (UseMyURL == "No")
                         {
                             Console.ForegroundColor = ConsoleColor.Cyan;
+							Console.WriteLine("Using Standard URL");
                         }
                         else
                         {
@@ -63,7 +85,6 @@ namespace DLC_Checker
                             Console.WriteLine("Using Custom URL");
                         }
                         Console.WriteLine("Connected to {0}", DLC_URL);
-
                         //Console.WriteLine("Hint: You can preserve your current {0} by disable autoupdate in {1} with: UpdateListFile=No", DLC_LIST_FILE, INI_FILE);
                         UPDATE_DLC_LIST(HTTP_RESPOND.Item2);
                     }
@@ -84,22 +105,8 @@ namespace DLC_Checker
                 }
                 Console.ResetColor();
             }
-
-            // DLC LIST = [DLC_FILENAME, DLC_NAME]
-            IDictionary<string, string> DLC_LIST = READ_DLC_LIST();
-            List<string> GAMEDATA_LIST = READ_GAMEDATA();
-
-            // DLC LIST SORTED
-            // Item 1 = INSTALLED_DLC
-            // Item 2 = NOT_INSTALLED_DLC
-            Tuple<List<string>, List<string>> DLC_LIST_SORTED = COMPARE_DLC(DLC_LIST, GAMEDATA_LIST);
-
-            PRINT_DLC(DLC_LIST_SORTED.Item1, DLC_LIST_SORTED.Item2);
-
-            EXIT_PROGRAM();
+			
 		}
-		// End Main
-	
 		// PRINT_HEADER
 		static void PRINT_HEADER()
         {
