@@ -12,9 +12,14 @@
     <AssemblyName>DLC_Checker_TEST</AssemblyName>
     <RootNamespace>DLC_Checker</RootNamespace>
     <Description></Description>
-    <Version>1.0.0</Version>
-    <AssemblyVersion>1.0.0.0</AssemblyVersion>
-  </PropertyGroup>
+    <Version>1.1.0</Version>
+    <PackageLicenseFile></PackageLicenseFile>
+</PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="LICENSE" />
+    <None Remove="LICENSE" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.7.0" />

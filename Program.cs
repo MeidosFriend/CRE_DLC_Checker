@@ -1,4 +1,5 @@
 ﻿using System;
+//using System.Reflection;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace DLC_Checker
 
         static readonly string GAME_NAME = MyData.GetGAME_NAME();
         static readonly string GAME_REGISTRY = MyData.GetGAME_REGISTRY();
-        static readonly string INI_FILE = MyData.GetINI_FILE();
+        //static readonly string INI_FILE = MyData.GetINI_FILE();
         static readonly string DLC_LIST_FILE = MyData.GetDLC_LIST_FILE();
         static readonly string MY_DLC_LIST_FILE = MyData.GetMY_DLC_LIST_FILE();
         static readonly string DLC_LIST_PATH = MyData.GetDLC_LIST_PATH();
@@ -32,9 +33,11 @@ namespace DLC_Checker
         {
             // Write Header Lines to Console
             PRINT_HEADER();
-			
-			// update/get DLC Listfile 
-			GET_DLC_LISTFILE();
+
+            //Console.WriteLine(VERSION);
+
+            // update/get DLC Listfile 
+            GET_DLC_LISTFILE();
             
             // DLC LIST = [DLC_FILENAME, DLC_NAME]
             IDictionary<string, string> DLC_LIST = READ_DLC_LIST();
@@ -211,7 +214,8 @@ namespace DLC_Checker
                 		CONSOLE_COLOR(ConsoleColor.Yellow, "Current working directory: " + Directory.GetCurrentDirectory());
                     	return Directory.GetCurrentDirectory();
             		}
-					CONSOLE_COLOR(ConsoleColor.Cyan, GAME_NAME + "installation directory found in registry: " + GAME_DIRECTORY_REGISTRY);
+                    CONSOLE_COLOR(ConsoleColor.Cyan, GAME_NAME + " installation directory found in registry:");
+                    CONSOLE_COLOR(ConsoleColor.Cyan, GAME_DIRECTORY_REGISTRY);
                     return GAME_DIRECTORY_REGISTRY;
                 }
                 else
