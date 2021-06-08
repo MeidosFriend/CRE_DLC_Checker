@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/MeidosFriend/DLC_Checker_Test</RepositoryUrl>
     <SignAssembly>false</SignAssembly>
     <StartupObject></StartupObject>
-    <AssemblyName>CRE_DLC_Checker_TEST</AssemblyName>
+    <AssemblyName>CRE_DLC_Checker</AssemblyName>
     <RootNamespace>DLC_Checker</RootNamespace>
     <Description></Description>
     <Version>1.0.0</Version>

@@ -327,7 +327,27 @@ namespace DLC_Checker
                     //EXIT_PROGRAM();
                 }                
             }
+            //return GAMEDATA_LIST;
+
+            if (GAME_NAME.Contains("CRE"))
+            {
+                string GAMEDATA_DLC_DIRECTORY = GAME_DIRECTORY + "\\GameData\\dlc";
+
+                try
+                {
+                    GAMEDATA_LIST.AddRange(Directory.GetFiles(@GAMEDATA_DLC_DIRECTORY, "*", SearchOption.TopDirectoryOnly).Select(Path.GetFileName));
+                }
+                catch (DirectoryNotFoundException)
+                {
+                    CONSOLE_COLOR(ConsoleColor.Yellow, "DLC Directory doesn't exist!");
+                    EXIT_PROGRAM();
+                }
+            }
             return GAMEDATA_LIST;
+
+
+
+
         }
         		
 		static Tuple<List<string>,List<string>> COMPARE_DLC(IDictionary<string, string> DLC_LIST, List<string> GAMEDATA_LIST)
