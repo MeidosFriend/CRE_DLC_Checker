@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <ApplicationIcon>40413.ico</ApplicationIcon>
+    <ApplicationIcon>CRE.ico</ApplicationIcon>
     <Authors>MeidosFriend</Authors>
     <PackageProjectUrl></PackageProjectUrl>
     <RepositoryUrl>https://github.com/MeidosFriend/DLC_Checker_Test</RepositoryUrl>
