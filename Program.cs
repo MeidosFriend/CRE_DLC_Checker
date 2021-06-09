@@ -14,7 +14,7 @@ namespace DLC_Checker
 
         // Class Gamedata init, sets the Values for the used Game
         static GameData MyData = new GameData();
-        
+
         static readonly string GAME_NAME = MyData.GetGAME_NAME();
         static readonly string GAME_REGISTRY = MyData.GetGAME_REGISTRY();
         //static readonly string INI_FILE = MyData.GetINI_FILE();
@@ -23,7 +23,7 @@ namespace DLC_Checker
         static readonly string DLC_LIST_PATH = MyData.GetDLC_LIST_PATH();
         static readonly string GAME_HEADER = MyData.GetGAME_HEADER();
         static readonly string DLC_URL = MyData.GetDLC_URL();
-        
+
         static readonly string UseCurrentDir = MyData.GetUseCurrentDir().ToUpper();
         static readonly string UpdateListFile = MyData.GetUpdateListFile().ToUpper();
         static readonly string MyDLCListFile = MyData.GetMyDLCListFile().ToUpper();
@@ -61,25 +61,54 @@ namespace DLC_Checker
         {
             string line;
             string text = "GameVersion";
+            string text2 = "EditSystem.exe";
             string logfile;
             if (GAME_NAME == "CM3D2")
             {
                 logfile = "\\CM3D2x64_Data\\output_log.txt";
             }
             else
+                if (GAME_NAME == "CRE")
+            {
+                logfile = "\\update.lst";
+            }
+            else
             {
                 logfile = "\\COM3D2x64_Data\\output_log.txt";
             }
+        
+
             try
             {
                 StreamReader file = new StreamReader(GAME_DIRECTORY + logfile);
-
                 while ((line = file.ReadLine()) != null)
                 {
                     if (line.Contains(text))
                     {
                         CONSOLE_COLOR(ConsoleColor.Cyan, line);
                         break;
+                    }
+                    else
+                    {
+                        if (GAME_NAME == "CRE" && line.Contains(text2))
+                        {
+                            //split string
+                            string[] temp_line = line.Split(',');
+                            char[] linec = temp_line[1].ToCharArray();
+                            string Version = linec[0].ToString();
+                            if (linec[1] == '0')
+                                Version = Version + "." + linec[2].ToString() + ".";
+                            else
+                                Version = Version + "." + linec[1].ToString() + linec[2].ToString() + ".";
+                            if (linec[3] == '0')
+                                Version = Version + linec[4].ToString();
+                            else
+                                Version = Version + linec[3].ToString() + linec[4].ToString();
+
+                            CONSOLE_COLOR(ConsoleColor.Cyan, "CR Edit Version V" + Version );
+                            break;
+                        }
+
                     }
                 }
                 file.Close();
