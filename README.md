@@ -1,4 +1,4 @@
-# CR-Edit DLC Checker V1.0
+# CR-Edit DLC Checker V1.1
 
 ![](Screen_1.jpg)
 App that checking which one DLC have been installed and not.
@@ -33,17 +33,11 @@ The ini file supports several runtime-parameter:
 
 ** CRE_DLC_Checker.ini ** 
 
-[GameDirectory]
-UseCurrentDir=No
-
 [DLCListFile]
 UpdateListFile=Yes
 MyDLCListFile=No
 
 ---------
-UseCurrentDir
-- If set to "No" The game directory is read from the registry (only valid when game is installed) (Default)
-- "Yes" means the current directory is used (only valid if current dir is a game dir)
 
 UpdateListFile
 - If set to "Yes", the actual file COM_EN_NewListDLC.lst is downloaded from Internet, overwriting current file! (Default)
