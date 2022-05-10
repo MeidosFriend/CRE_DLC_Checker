@@ -11,8 +11,8 @@
     <StartupObject></StartupObject>
     <AssemblyName>CRE_DLC_Checker</AssemblyName>
     <RootNamespace>DLC_Checker</RootNamespace>
-    <Description></Description>
-    <Version>1.0.0</Version>
+    <Description>Check what DLC are installed, showing those missing</Description>
+    <Version>1.1.0</Version>
     <PackageLicenseFile></PackageLicenseFile>
 </PropertyGroup>
 
